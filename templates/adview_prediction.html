@@ -1,0 +1,223 @@
+{% extends 'layout.html' %}
+
+{% block title %}Ad View Prediction - Insight AI{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="mb-4">
+            <h1 class="display-5 fw-bold">Ad View Prediction</h1>
+            <p class="lead">Predict advertisement views for your video content</p>
+        </div>
+        
+        <div class="card shadow border-0 mb-4">
+            <div class="card-body">
+                <form id="adviewForm" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <!-- Views -->
+                        <div class="col-md-6">
+                            <label for="views" class="form-label">Total Views</label>
+                            <input type="number" class="form-control" id="views" name="views" min="0" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid number of views.
+                            </div>
+                        </div>
+                        
+                        <!-- Likes -->
+                        <div class="col-md-6">
+                            <label for="likes" class="form-label">Like Count</label>
+                            <input type="number" class="form-control" id="likes" name="likes" min="0" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid number of likes.
+                            </div>
+                        </div>
+                        
+                        <!-- Dislikes -->
+                        <div class="col-md-6">
+                            <label for="dislikes" class="form-label">Dislike Count</label>
+                            <input type="number" class="form-control" id="dislikes" name="dislikes" min="0" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid number of dislikes.
+                            </div>
+                        </div>
+                        
+                        <!-- Comment Count -->
+                        <div class="col-md-6">
+                            <label for="comment_count" class="form-label">Comment Count</label>
+                            <input type="number" class="form-control" id="comment_count" name="comment_count" min="0" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid number of comments.
+                            </div>
+                        </div>
+                        
+                        <!-- Category -->
+                        <div class="col-md-6">
+                            <label for="category" class="form-label">Video Category</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="" selected disabled>Select video category</option>
+                                <option value="A">Entertainment</option>
+                                <option value="B">Music</option>
+                                <option value="C">Education</option>
+                                <option value="D">Technology</option>
+                                <option value="E">Lifestyle</option>
+                                <option value="F">Gaming</option>
+                                <option value="G">Travel & Events</option>
+                                <option value="H">Food & Cooking</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a video category.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary" id="predictButton">
+                            <i class="fas fa-chart-line me-2"></i>Predict Ad Views
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Result Card (Hidden by default) -->
+        <div class="card shadow border-0 mb-4 d-none" id="resultCard">
+            <div class="card-body text-center">
+                <h4 class="mb-3">Predicted Ad Views</h4>
+                <div class="display-1 fw-bold text-primary mb-3" id="predictionResult">--</div>
+                <p class="text-muted mb-0">Expected advertisement views based on your video metrics</p>
+            </div>
+        </div>
+        
+        <!-- Error Alert (Hidden by default) -->
+        <div class="alert alert-danger d-none" id="errorAlert" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <span id="errorMessage">An error occurred while making the prediction.</span>
+        </div>
+        
+        <!-- Category Information Card -->
+        <div class="card border-0 shadow mt-4">
+            <div class="card-header bg-transparent">
+                <h5 class="mb-0">Video Categories Guide</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-primary me-2">A</span>
+                                <span>Entertainment - General entertainment content</span>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-primary me-2">B</span>
+                                <span>Music - Music videos, performances, covers</span>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-primary me-2">C</span>
+                                <span>Education - Educational and instructional content</span>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-primary me-2">D</span>
+                                <span>Technology - Tech reviews, tutorials, gadgets</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-primary me-2">E</span>
+                                <span>Lifestyle - Fashion, beauty, health, fitness</span>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-primary me-2">F</span>
+                                <span>Gaming - Video game content, gameplay, reviews</span>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-primary me-2">G</span>
+                                <span>Travel & Events - Travel vlogs, event coverage</span>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-primary me-2">H</span>
+                                <span>Food & Cooking - Recipes, food reviews, cooking</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('adviewForm');
+    const resultCard = document.getElementById('resultCard');
+    const predictionResult = document.getElementById('predictionResult');
+    const errorAlert = document.getElementById('errorAlert');
+    const errorMessage = document.getElementById('errorMessage');
+    const predictButton = document.getElementById('predictButton');
+    
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Form validation
+        if (!form.checkValidity()) {
+            event.stopPropagation();
+            form.classList.add('was-validated');
+            return;
+        }
+        
+        // Hide previous results and errors
+        resultCard.classList.add('d-none');
+        errorAlert.classList.add('d-none');
+        
+        // Show loading state
+        predictButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Predicting...';
+        predictButton.disabled = true;
+        
+        // Get form data
+        const formData = {
+            views: document.getElementById('views').value,
+            likes: document.getElementById('likes').value,
+            dislikes: document.getElementById('dislikes').value,
+            comment_count: document.getElementById('comment_count').value,
+            category: document.getElementById('category').value
+        };
+        
+        // Make API call
+        fetch('/api/predict-adview', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                // Show error
+                errorMessage.textContent = data.error;
+                errorAlert.classList.remove('d-none');
+            } else {
+                // Show prediction result
+                predictionResult.textContent = new Intl.NumberFormat().format(data.prediction);
+                resultCard.classList.remove('d-none');
+                
+                // Scroll to result
+                resultCard.scrollIntoView({ behavior: 'smooth' });
+            }
+        })
+        .catch(error => {
+            // Show error
+            errorMessage.textContent = "An error occurred while communicating with the server.";
+            errorAlert.classList.remove('d-none');
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            // Reset button state
+            predictButton.innerHTML = '<i class="fas fa-chart-line me-2"></i>Predict Ad Views';
+            predictButton.disabled = false;
+        });
+    });
+});
+</script>
+{% endblock %}

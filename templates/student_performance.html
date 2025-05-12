@@ -1,0 +1,209 @@
+{% extends 'layout.html' %}
+
+{% block title %}Student Performance Prediction - Insight AI{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="mb-4">
+            <h1 class="display-5 fw-bold">Student Performance Prediction</h1>
+            <p class="lead">Predict a student's math score based on various factors</p>
+        </div>
+        
+        <div class="card shadow border-0 mb-4">
+            <div class="card-body">
+                <form id="studentForm" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <!-- Gender -->
+                        <div class="col-md-6">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="" selected disabled>Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a gender.
+                            </div>
+                        </div>
+                        
+                        <!-- Race/Ethnicity -->
+                        <div class="col-md-6">
+                            <label for="race_ethnicity" class="form-label">Race/Ethnicity</label>
+                            <select class="form-select" id="race_ethnicity" name="race_ethnicity" required>
+                                <option value="" selected disabled>Select race/ethnicity</option>
+                                <option value="group A">Asian Students</option>
+                                <option value="group B">African-American Students</option>
+                                <option value="group C">Hispanic Students</option>
+                                <option value="group D">European Students</option>
+                                <option value="group E">Native American Students</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select race/ethnicity.
+                            </div>
+                        </div>
+                        
+                        <!-- Parental Education -->
+                        <div class="col-md-6">
+                            <label for="parental_education" class="form-label">Parental Level of Education</label>
+                            <select class="form-select" id="parental_education" name="parental_education" required>
+                                <option value="" selected disabled>Select education level</option>
+                                <option value="bachelor's degree">Bachelor's Degree</option>
+                                <option value="some college">Some College</option>
+                                <option value="master's degree">Master's Degree</option>
+                                <option value="associate's degree">Associate's Degree</option>
+                                <option value="high school">High School</option>
+                                <option value="some high school">Some High School</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select parental education level.
+                            </div>
+                        </div>
+                        
+                        <!-- Lunch Type -->
+                        <div class="col-md-6">
+                            <label for="lunch" class="form-label">Lunch Type</label>
+                            <select class="form-select" id="lunch" name="lunch" required>
+                                <option value="" selected disabled>Select lunch type</option>
+                                <option value="standard">Standard</option>
+                                <option value="free/reduced">Free/Reduced</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select lunch type.
+                            </div>
+                        </div>
+                        
+                        <!-- Test Preparation -->
+                        <div class="col-md-6">
+                            <label for="test_preparation" class="form-label">Test Preparation Course</label>
+                            <select class="form-select" id="test_preparation" name="test_preparation" required>
+                                <option value="" selected disabled>Select test preparation</option>
+                                <option value="none">None</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select test preparation status.
+                            </div>
+                        </div>
+                        
+                        <!-- Reading Score -->
+                        <div class="col-md-6">
+                            <label for="reading_score" class="form-label">Reading Score (0-100)</label>
+                            <input type="number" class="form-control" id="reading_score" name="reading_score" min="0" max="100" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid reading score (0-100).
+                            </div>
+                        </div>
+                        
+                        <!-- Writing Score -->
+                        <div class="col-md-6">
+                            <label for="writing_score" class="form-label">Writing Score (0-100)</label>
+                            <input type="number" class="form-control" id="writing_score" name="writing_score" min="0" max="100" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid writing score (0-100).
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary" id="predictButton">
+                            <i class="fas fa-calculator me-2"></i>Predict Math Score
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Result Card (Hidden by default) -->
+        <div class="card shadow border-0 mb-4 d-none" id="resultCard">
+            <div class="card-body text-center">
+                <h4 class="mb-3">Predicted Math Score</h4>
+                <div class="display-1 fw-bold text-primary mb-3" id="predictionResult">--</div>
+                <p class="text-muted mb-0">This prediction is based on the student information provided</p>
+            </div>
+        </div>
+        
+        <!-- Error Alert (Hidden by default) -->
+        <div class="alert alert-danger d-none" id="errorAlert" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <span id="errorMessage">An error occurred while making the prediction.</span>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('studentForm');
+    const resultCard = document.getElementById('resultCard');
+    const predictionResult = document.getElementById('predictionResult');
+    const errorAlert = document.getElementById('errorAlert');
+    const errorMessage = document.getElementById('errorMessage');
+    const predictButton = document.getElementById('predictButton');
+    
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Form validation
+        if (!form.checkValidity()) {
+            event.stopPropagation();
+            form.classList.add('was-validated');
+            return;
+        }
+        
+        // Hide previous results and errors
+        resultCard.classList.add('d-none');
+        errorAlert.classList.add('d-none');
+        
+        // Show loading state
+        predictButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Predicting...';
+        predictButton.disabled = true;
+        
+        // Get form data
+        const formData = {
+            gender: document.getElementById('gender').value,
+            race_ethnicity: document.getElementById('race_ethnicity').value,
+            parental_education: document.getElementById('parental_education').value,
+            lunch: document.getElementById('lunch').value,
+            test_preparation: document.getElementById('test_preparation').value,
+            reading_score: document.getElementById('reading_score').value,
+            writing_score: document.getElementById('writing_score').value
+        };
+        
+        // Make API call
+        fetch('/api/predict-student-performance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                // Show error
+                errorMessage.textContent = data.error;
+                errorAlert.classList.remove('d-none');
+            } else {
+                // Show prediction result
+                predictionResult.textContent = data.prediction;
+                resultCard.classList.remove('d-none');
+                
+                // Scroll to result
+                resultCard.scrollIntoView({ behavior: 'smooth' });
+            }
+        })
+        .catch(error => {
+            // Show error
+            errorMessage.textContent = "An error occurred while communicating with the server.";
+            errorAlert.classList.remove('d-none');
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            // Reset button state
+            predictButton.innerHTML = '<i class="fas fa-calculator me-2"></i>Predict Math Score';
+            predictButton.disabled = false;
+        });
+    });
+});
+</script>
+{% endblock %}
