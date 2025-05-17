@@ -1,4 +1,4 @@
-# Insight AI[Live🔗](https://insight-ai-903t.onrender.com/)
+# Insight AI[(Live🔗)](https://insight-ai-903t.onrender.com/)
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
@@ -8,6 +8,7 @@
 
 A powerful machine learning platform offering predictive analytics for ad viewership and student performance. Insight AI leverages cutting-edge algorithms to deliver actionable intelligence for marketing and educational domains.
 
+**Deployed on Render**: https://insight-ai-903t.onrender.com/
 ## 📋 Table of Contents
 
 - [Overview](#overview)
