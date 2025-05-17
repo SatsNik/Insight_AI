@@ -8,7 +8,7 @@
 
 A powerful machine learning platform offering predictive analytics for ad viewership and student performance. Insight AI leverages cutting-edge algorithms to deliver actionable intelligence for marketing and educational domains.
 
-**Deployed on Render**: https://insight-ai-903t.onrender.com/
+**Deployed & Live**: https://insight-ai-903t.onrender.com/
 ## 📋 Table of Contents
 
 - [Overview](#overview)
