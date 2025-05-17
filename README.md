@@ -8,10 +8,6 @@
 
 A powerful machine learning platform offering predictive analytics for ad viewership and student performance. Insight AI leverages cutting-edge algorithms to deliver actionable intelligence for marketing and educational domains.
 
-<p align="center">
-  <img src="generated-icon.png" alt="Insight AI Logo" width="150">
-</p>
-
 ## 📋 Table of Contents
 
 - [Overview](#overview)
@@ -299,23 +295,3 @@ The student performance model is trained on data with the following structure:
 ```
 student_id, gender, age, previous_score, attendance_rate, study_hours_per_week, participation_score, extracurricular_activities, performance_category
 ```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-
-<p align="center">
-  Made with ❤️ by Your Team Name
-</p>
