@@ -148,6 +148,7 @@ insight-ai/
 - **Pandas**: Data manipulation and analysis
 - **NumPy**: Numerical computing
 - **Matplotlib/Seaborn**: Data visualization
+- **Jupyter Notebook**
 
 ### Frontend
 - **HTML5/CSS3**: Structure and styling
