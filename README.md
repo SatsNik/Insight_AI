@@ -1,4 +1,4 @@
-# Insight AI[(Live🔗)](https://insight-ai-903t.onrender.com/)
+# Insight AI[(Live)🔗](https://insight-ai-903t.onrender.com/)
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
